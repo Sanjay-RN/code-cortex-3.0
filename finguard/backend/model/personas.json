@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Cautious Saver",
+    "description": "Lower discretionary spend, infrequent purchases, prefers predictable patterns. Small deviations in spend are meaningful.",
+    "risk_multiplier": 1.35,
+    "color": "#3b82f6",
+    "cluster_id": 2,
+    "size": 656,
+    "pct_of_customers": 29.3,
+    "avg_income": 31557.1,
+    "avg_age": 48.9,
+    "avg_total_spend": 117.9,
+    "avg_digital_ratio": 0.4
+  },
+  {
+    "name": "Steady Spender",
+    "description": "Moderate income and balanced spending across categories. Represents typical baseline behavior.",
+    "risk_multiplier": 1.0,
+    "color": "#10b981",
+    "cluster_id": 0,
+    "size": 483,
+    "pct_of_customers": 21.6,
+    "avg_income": 41780.2,
+    "avg_age": 62.8,
+    "avg_total_spend": 140.4,
+    "avg_digital_ratio": 0.3
+  },
+  {
+    "name": "Digital-First Shopper",
+    "description": "High web-purchase ratio and frequent site visits. Comfortable with online/high-frequency transactions.",
+    "risk_multiplier": 0.85,
+    "color": "#f59e0b",
+    "cluster_id": 1,
+    "size": 514,
+    "pct_of_customers": 23.0,
+    "avg_income": 59708.5,
+    "avg_age": 62.2,
+    "avg_total_spend": 862.6,
+    "avg_digital_ratio": 0.4
+  },
+  {
+    "name": "Premium High-Spender",
+    "description": "High income and high total spend across categories, including premium/gold products. Large transactions are normal.",
+    "risk_multiplier": 0.65,
+    "color": "#8b5cf6",
+    "cluster_id": 3,
+    "size": 583,
+    "pct_of_customers": 26.1,
+    "avg_income": 76491.6,
+    "avg_age": 57.2,
+    "avg_total_spend": 1314.7,
+    "avg_digital_ratio": 0.2
+  }
+]

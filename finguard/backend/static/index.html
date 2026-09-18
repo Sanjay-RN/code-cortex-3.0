@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinGuard AI — Persona-Adaptive Fraud Intelligence</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">◈</span>
+      <div>
+        <div class="brand-name">FinGuard<span class="brand-ai">AI</span></div>
+        <div class="brand-sub">Risk Intelligence</div>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <button class="nav-item active" data-view="overview">
+        <span class="nav-icon">▣</span> Overview
+      </button>
+      <button class="nav-item" data-view="live">
+        <span class="nav-icon">◉</span> Live Feed
+      </button>
+      <button class="nav-item" data-view="personas">
+        <span class="nav-icon">◐</span> Customer Personas
+      </button>
+      <button class="nav-item" data-view="model">
+        <span class="nav-icon">▲</span> Model Performance
+      </button>
+      <button class="nav-item" data-view="simulate">
+        <span class="nav-icon">◆</span> Try It Yourself
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="status-dot"></div>
+      <span>Engine live · RandomForest v1</span>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- OVERVIEW -->
+    <section class="view active" id="view-overview">
+      <header class="view-header">
+        <div>
+          <h1>Overview</h1>
+          <p class="subtitle">One risk threshold does not fit every customer. FinGuard adapts.</p>
+        </div>
+      </header>
+
+      <div class="hero-stats">
+        <div class="stat-card stat-primary">
+          <div class="stat-label">Transactions monitored</div>
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-foot">this session</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Flagged as risky</div>
+          <div class="stat-value" id="stat-flagged">0</div>
+          <div class="stat-foot" id="stat-flagged-pct">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Model precision</div>
+          <div class="stat-value" id="stat-precision">—</div>
+          <div class="stat-foot">of flags are real fraud</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Model recall</div>
+          <div class="stat-value" id="stat-recall">—</div>
+          <div class="stat-foot">of fraud actually caught</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>How persona-adaptive scoring works</h3>
+          <div class="flow">
+            <div class="flow-step">
+              <span class="flow-num">1</span>
+              <div>
+                <strong>Transaction arrives</strong>
+                <p>Amount, time and 28 anonymized behavioral signals from the payment network.</p>
+              </div>
+            </div>
+            <div class="flow-step">
+              <span class="flow-num">2</span>
+              <div>
+                <strong>Base fraud model scores it</strong>
+                <p>A RandomForest trained on 284,807 transactions returns a raw fraud probability.</p>
+              </div>
+            </div>
+            <div class="flow-step">
+              <span class="flow-num">3</span>
+              <div>
+                <strong>Persona adjusts the bar</strong>
+                <p>The customer's behavioral segment shifts the alert threshold — a big purchase is normal for a Premium Spender, unusual for a Cautious Saver.</p>
+              </div>
+            </div>
+            <div class="flow-step">
+              <span class="flow-num">4</span>
+              <div>
+                <strong>Explainable verdict</strong>
+                <p>Every flag ships with the top signals that drove it — no black box.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Why datasets were combined</h3>
+          <p class="muted">FinGuard fuses two public financial datasets that are normally used in isolation:</p>
+          <ul class="dataset-list">
+            <li><strong>creditcard.csv</strong> — 284,807 real, anonymized card transactions with confirmed fraud labels (492 frauds, 0.17%). Powers the core detection model.</li>
+            <li><strong>marketing_campaign.csv</strong> — 2,240 customers' income, spend and channel behavior. Powers the persona segmentation layer.</li>
+          </ul>
+          <p class="muted note">Since these are separate public datasets, this demo assigns each simulated transaction a persona synthetically to illustrate the mechanism — in production, personas would be learned per real customer from their own transaction history.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE FEED -->
+    <section class="view" id="view-live">
+      <header class="view-header">
+        <div>
+          <h1>Live Transaction Feed</h1>
+          <p class="subtitle">Simulated in real time from held-out test transactions the model has never trained on.</p>
+        </div>
+        <div class="header-actions">
+          <div class="live-counter-pill" id="feed-stat-counter"><strong>0</strong> processed · <strong>0</strong> flagged (0%)</div>
+          <button class="btn btn-ghost" id="btn-reset">Reset session</button>
+          <button class="btn btn-primary" id="btn-toggle-stream">▶ Start stream</button>
+        </div>
+      </header>
+
+      <div class="live-grid">
+        <div class="panel feed-panel">
+          <div class="feed-head">
+            <span>Transaction</span><span>Amount</span><span>Persona</span><span>Risk</span><span>Verdict</span>
+          </div>
+          <div class="feed-body" id="feed-body">
+            <div class="empty-state">Press "Start stream" to begin simulating live transactions.</div>
+          </div>
+        </div>
+
+        <div class="panel detail-panel">
+          <h3>Explanation</h3>
+          <div id="detail-empty" class="empty-state">Click a transaction in the feed to see why it was scored that way.</div>
+          <div id="detail-content" style="display:none">
+            <div class="detail-row"><span>Transaction</span><strong id="d-txn"></strong></div>
+            <div class="detail-row"><span>Amount</span><strong id="d-amount"></strong></div>
+            <div class="detail-row"><span>Fraud probability</span><strong id="d-proba"></strong></div>
+            <div class="detail-row"><span>Persona</span><strong id="d-persona"></strong></div>
+            <div class="detail-row"><span>Effective threshold</span><strong id="d-threshold"></strong></div>
+            <div class="detail-row"><span>Verdict</span><strong id="d-verdict"></strong></div>
+            <h4>Top contributing signals</h4>
+            <div id="d-explanation" class="explanation-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PERSONAS -->
+    <section class="view" id="view-personas">
+      <header class="view-header">
+        <div>
+          <h1>Customer Personas</h1>
+          <p class="subtitle">Behavioral segments learned from spending patterns, clustered with K-Means.</p>
+        </div>
+      </header>
+      <div class="persona-grid" id="persona-grid"></div>
+    </section>
+
+    <!-- MODEL PERFORMANCE -->
+    <section class="view" id="view-model">
+      <header class="view-header">
+        <div>
+          <h1>Model Performance</h1>
+          <p class="subtitle">Evaluated on a held-out 25% test split (71,202 transactions, never seen during training).</p>
+        </div>
+      </header>
+
+      <div class="hero-stats">
+        <div class="stat-card"><div class="stat-label">ROC-AUC</div><div class="stat-value" id="m-roc">—</div></div>
+        <div class="stat-card"><div class="stat-label">PR-AUC</div><div class="stat-value" id="m-pr">—</div></div>
+        <div class="stat-card"><div class="stat-label">F1 score</div><div class="stat-value" id="m-f1">—</div></div>
+        <div class="stat-card"><div class="stat-label">Decision threshold</div><div class="stat-value" id="m-threshold">—</div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Confusion matrix</h3>
+          <div class="confusion-matrix" id="confusion-matrix"></div>
+        </div>
+        <div class="panel">
+          <h3>ROC curve</h3>
+          <canvas id="roc-chart" height="220"></canvas>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:20px">
+        <h3>Global feature importance</h3>
+        <canvas id="importance-chart" height="140"></canvas>
+      </div>
+    </section>
+
+    <!-- SIMULATE -->
+    <section class="view" id="view-simulate">
+      <header class="view-header">
+        <div>
+          <h1>Try It Yourself</h1>
+          <p class="subtitle">Build a transaction and see how FinGuard scores it — and how the verdict shifts by persona.</p>
+        </div>
+      </header>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Transaction builder</h3>
+          <div class="form-row">
+            <label>Amount (₹)</label>
+            <input type="range" id="sim-amount" min="1" max="5000" value="120">
+            <span class="range-value" id="sim-amount-val">₹120</span>
+          </div>
+          <div class="form-row">
+            <label>Hour of day</label>
+            <input type="range" id="sim-hour" min="0" max="23" value="14">
+            <span class="range-value" id="sim-hour-val">14:00</span>
+          </div>
+          <div class="form-row">
+            <label>Customer persona</label>
+            <select id="sim-persona"></select>
+          </div>
+          <div id="sim-feature-sliders"></div>
+          <div class="preset-row">
+            <span class="muted">Quick presets:</span>
+            <button class="btn btn-ghost btn-sm" id="preset-normal">Typical purchase</button>
+            <button class="btn btn-ghost btn-sm" id="preset-fraud">Known fraud pattern</button>
+          </div>
+          <button class="btn btn-primary" id="btn-simulate" style="margin-top:16px">Score transaction</button>
+        </div>
+
+        <div class="panel">
+          <h3>Result</h3>
+          <div id="sim-empty" class="empty-state">Adjust the transaction and click "Score transaction".</div>
+          <div id="sim-result" style="display:none">
+            <div class="gauge-wrap">
+              <div class="gauge" id="sim-gauge">
+                <span id="sim-gauge-value">0%</span>
+              </div>
+              <div id="sim-verdict-badge" class="verdict-badge">—</div>
+            </div>
+            <div class="detail-row"><span>Effective threshold for this persona</span><strong id="sim-threshold"></strong></div>
+            <h4>Top contributing signals</h4>
+            <div id="sim-explanation" class="explanation-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

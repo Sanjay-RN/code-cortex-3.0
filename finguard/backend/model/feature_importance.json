@@ -1,0 +1,122 @@
+[
+  {
+    "feature": "V14",
+    "importance": 0.18454
+  },
+  {
+    "feature": "V4",
+    "importance": 0.13426
+  },
+  {
+    "feature": "V10",
+    "importance": 0.12283
+  },
+  {
+    "feature": "V17",
+    "importance": 0.10397
+  },
+  {
+    "feature": "V12",
+    "importance": 0.07229
+  },
+  {
+    "feature": "V11",
+    "importance": 0.06713
+  },
+  {
+    "feature": "V3",
+    "importance": 0.06378
+  },
+  {
+    "feature": "V7",
+    "importance": 0.03107
+  },
+  {
+    "feature": "V16",
+    "importance": 0.02857
+  },
+  {
+    "feature": "V2",
+    "importance": 0.02016
+  },
+  {
+    "feature": "V19",
+    "importance": 0.01434
+  },
+  {
+    "feature": "V21",
+    "importance": 0.014
+  },
+  {
+    "feature": "V6",
+    "importance": 0.01295
+  },
+  {
+    "feature": "V9",
+    "importance": 0.01287
+  },
+  {
+    "feature": "V18",
+    "importance": 0.0106
+  },
+  {
+    "feature": "V20",
+    "importance": 0.0102
+  },
+  {
+    "feature": "Amount_scaled",
+    "importance": 0.01008
+  },
+  {
+    "feature": "V8",
+    "importance": 0.00856
+  },
+  {
+    "feature": "V13",
+    "importance": 0.00834
+  },
+  {
+    "feature": "V26",
+    "importance": 0.00827
+  },
+  {
+    "feature": "V1",
+    "importance": 0.00802
+  },
+  {
+    "feature": "V5",
+    "importance": 0.00789
+  },
+  {
+    "feature": "V27",
+    "importance": 0.00779
+  },
+  {
+    "feature": "V15",
+    "importance": 0.00748
+  },
+  {
+    "feature": "V22",
+    "importance": 0.00617
+  },
+  {
+    "feature": "V25",
+    "importance": 0.00543
+  },
+  {
+    "feature": "V28",
+    "importance": 0.00525
+  },
+  {
+    "feature": "V23",
+    "importance": 0.00476
+  },
+  {
+    "feature": "V24",
+    "importance": 0.00446
+  },
+  {
+    "feature": "Hour",
+    "importance": 0.00397
+  }
+]
