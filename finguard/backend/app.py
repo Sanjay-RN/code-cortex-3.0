@@ -128,6 +128,59 @@ def score_with_persona(base_proba, persona_cluster_id):
     }
 
 
+def generate_next_transaction():
+    if STATE["cursor"] >= len(SAMPLE_TRANSACTIONS):
+        STATE["cursor"] = 0  # loop the demo feed
+    txn = SAMPLE_TRANSACTIONS[STATE["cursor"]]
+    STATE["cursor"] += 1
+
+    proba = txn["fraud_probability"]
+    persona_id = txn["persona_cluster"]
+    verdict = score_with_persona(proba, persona_id)
+    explanation = explain_transaction(txn["features"])
+
+    actual = txn["actual_class"]
+    predicted = 1 if verdict["flagged"] else 0
+    STATE["stats"]["total"] += 1
+    if predicted == 1:
+        STATE["stats"]["flagged"] += 1
+    if predicted == 1 and actual == 1:
+        STATE["stats"]["true_positive"] += 1
+    elif predicted == 1 and actual == 0:
+        STATE["stats"]["false_positive"] += 1
+    elif predicted == 0 and actual == 1:
+        STATE["stats"]["false_negative"] += 1
+    else:
+        STATE["stats"]["true_negative"] += 1
+
+    record = {
+        "txn_id": txn["txn_id"],
+        "customer_id": txn["customer_id"],
+        "amount": txn["amount"],
+        "hour": txn["hour"],
+        "timestamp": (datetime.now()).strftime("%H:%M:%S"),
+        "fraud_probability": proba,
+        "actual_class": actual,
+        "explanation": explanation,
+        **verdict,
+    }
+    STATE["processed_log"].append(record)
+    STATE["processed_log"] = STATE["processed_log"][-200:]
+    return record
+
+
+def init_simulation_state(count=15):
+    STATE["cursor"] = 0
+    STATE["processed_log"] = []
+    STATE["stats"] = {"total": 0, "flagged": 0, "true_positive": 0,
+                      "false_positive": 0, "false_negative": 0, "true_negative": 0}
+    for _ in range(count):
+        generate_next_transaction()
+
+
+init_simulation_state(15)
+
+
 # ---------------------------------------------------------------------------
 # Routes: static frontend
 # ---------------------------------------------------------------------------
